@@ -1,6 +1,7 @@
 package com.example.lutuan;
 
 import android.os.Bundle;
+import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -14,12 +15,17 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import java.util.Collections;
 import java.util.ArrayList;
+import java.util.List;
+
 import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    private List<String> selectedIngredients;
+    private ListView selectedIngredientsView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -57,7 +63,7 @@ public class MainActivity extends AppCompatActivity {
         Collections.sort(uniqueIngredients);
 
         // set tayo ng adapter
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, uniqueIngredients) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_2, uniqueIngredients) {
             @NonNull
             @Override
             public View getView(int position, View convertView, @NonNull ViewGroup parent) {
@@ -74,8 +80,25 @@ public class MainActivity extends AppCompatActivity {
             String ingredient = uniqueIngredients.get(pos);
             Toast.makeText(this, "Ingredient: " + ingredient, Toast.LENGTH_SHORT).show();
 
-//            TODO: pag ni-click lalabas sa chosen ingredients view
+            selectedIngredients.add(ingredient);
+            DisplaySelected();
         });
+    }
 
+    private void DisplaySelected()
+    {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, selectedIngredients) {
+            @NonNull
+            @Override
+            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                if (view instanceof TextView) {
+                    ((TextView) view).setTextColor(android.graphics.Color.parseColor("#F5f5f5"));
+                }
+                return view;
+            }
+        };
+
+        selectedIngredientsView.setAdapter(adapter);
     }
 }
