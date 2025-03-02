@@ -27,6 +27,9 @@ public class MainActivity extends AppCompatActivity {
     public ArrayList<String> selectedIngredient;
     public Button clearButton;
 
+    private List<String> selectedIngredients;
+    private ListView selectedIngredientsView;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -63,7 +66,7 @@ public class MainActivity extends AppCompatActivity {
         Collections.sort(uniqueIngredients);
 
         // set tayo ng adapter
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, uniqueIngredients) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_2, uniqueIngredients) {
             @NonNull
             @Override
             public View getView(int position, View convertView, @NonNull ViewGroup parent) {
@@ -79,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         ingredientsListView.setOnItemClickListener((parent, view, pos, id) -> {
             String ingredient = uniqueIngredients.get(pos);
 
+
             if (selectedIngredient.size() >= 5) {
                 Toast.makeText(this, "Puno na yung kaldero", Toast.LENGTH_SHORT).show();
                 return;
@@ -88,8 +92,27 @@ public class MainActivity extends AppCompatActivity {
                 }
                 selectedIngredient.add(ingredient);
             }
+
+            selectedIngredients.add(ingredient);
+
             DisplaySelected();
         });
+    }
+
+    private void DisplaySelected()
+    {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, selectedIngredients) {
+            @NonNull
+            @Override
+            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                if (view instanceof TextView) {
+                    ((TextView) view).setTextColor(android.graphics.Color.parseColor("#F5f5f5"));
+                }
+                return view;
+            }
+        };
+
 
         clearButton = findViewById(R.id.clearIngredients);
         clearButton.setOnClickListener(v -> {
@@ -111,6 +134,7 @@ public class MainActivity extends AppCompatActivity {
                 return view;
             }
         };
+
 
         selectedIngredientsView.setAdapter(adapter);
     }
