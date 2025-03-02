@@ -84,6 +84,12 @@ public class MainActivity extends AppCompatActivity {
                 return;
             }
             else {
+                for (String noDuplicateIng : selectedIngredient) {
+                    if (selectedIngredient.contains(noDuplicateIng)) {
+                        Toast.makeText(this, "Bawal umulit, tanggalin mo yan", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
                 selectedIngredient.add(ingredient);
             }
             DisplaySelected();
