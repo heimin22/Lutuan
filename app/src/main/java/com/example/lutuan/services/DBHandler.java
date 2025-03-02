@@ -24,7 +24,7 @@ public class DBHandler extends SQLiteOpenHelper {
         db.insert(DB_NAME, null, values);
     }
 
-    public String formatCheckedValues(String[] checkedValues) {
+    public String formatIngredients(String[] checkedValues) {
         StringBuilder formattedValues = new StringBuilder();
         int lastIndex = checkedValues.length;
         int currentIndex = 0;
@@ -37,6 +37,14 @@ public class DBHandler extends SQLiteOpenHelper {
             }
         }
         return formattedValues.toString();
+    }
+
+    public String getDishByIngredients(String ingredients){
+        SQLiteDatabase db = this.getReadableDatabase();
+        String query = "SELECT * FROM " + DB_NAME + " WHERE " + INGREDIENTS_COL + " = '" + ingredients + "'";
+        String dish = db.rawQuery(query, null).toString();
+        if(dish.isEmpty()) return "No Dish Found";
+        return dish;
     }
 
     @Override
