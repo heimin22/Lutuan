@@ -22,13 +22,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.lutuan.services.DBHandler;
 
 public class MainActivity extends AppCompatActivity {
     public ArrayList<String> selectedIngredient;
     public Button clearButton;
-
-    private List<String> selectedIngredients;
-    private ListView selectedIngredientsView;
+    public Button submitButton;
+    public DBHandler dbHandler;
+    public String formattedIngredients;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -66,7 +67,7 @@ public class MainActivity extends AppCompatActivity {
         Collections.sort(uniqueIngredients);
 
         // set tayo ng adapter
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_2, uniqueIngredients) {
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, uniqueIngredients) {
             @NonNull
             @Override
             public View getView(int position, View convertView, @NonNull ViewGroup parent) {
@@ -82,46 +83,30 @@ public class MainActivity extends AppCompatActivity {
         ingredientsListView.setOnItemClickListener((parent, view, pos, id) -> {
             String ingredient = uniqueIngredients.get(pos);
 
-
             if (selectedIngredient.size() >= 5) {
                 Toast.makeText(this, "Puno na yung kaldero", Toast.LENGTH_SHORT).show();
                 return;
-            }
-            else {
-                for (String noDuplicateIng : selectedIngredient) {
-                    if (selectedIngredient.contains(noDuplicateIng)) {
-                        Toast.makeText(this, "Bawal umulit, tanggalin mo yan", Toast.LENGTH_SHORT).show();
-                        return;
-                    }
+            } else {
+                if (selectedIngredient.contains(ingredient)) {
+                    return;
                 }
                 selectedIngredient.add(ingredient);
             }
-
-            selectedIngredients.add(ingredient);
-
             DisplaySelected();
         });
-    }
-
-    private void DisplaySelected()
-    {
-        ArrayAdapter<String> adapter = new ArrayAdapter<>(this, android.R.layout.simple_list_item_1, selectedIngredients) {
-            @NonNull
-            @Override
-            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                if (view instanceof TextView) {
-                    ((TextView) view).setTextColor(android.graphics.Color.parseColor("#F5f5f5"));
-                }
-                return view;
-            }
-        };
-
 
         clearButton = findViewById(R.id.clearIngredients);
         clearButton.setOnClickListener(v -> {
             selectedIngredient.clear();
             DisplaySelected();
+        });
+
+        submitButton = findViewById(R.id.submitIngredients);
+        submitButton.setOnClickListener(v -> {
+            dbHandler = new DBHandler(this);
+            formattedIngredients = dbHandler.formatIngredients(selectedIngredient);
+            String dish = dbHandler.getDishByIngredients(formattedIngredients.toLowerCase());
+            Toast.makeText(this, "Ang nailuto mo ay: " + dish, Toast.LENGTH_SHORT).show();
         });
     }
 
@@ -138,7 +123,6 @@ public class MainActivity extends AppCompatActivity {
                 return view;
             }
         };
-
 
         selectedIngredientsView.setAdapter(adapter);
     }

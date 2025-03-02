@@ -2,10 +2,15 @@ package com.example.lutuan.services;
 
 import android.content.ContentValues;
 import android.content.Context;
+import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
 import java.util.ArrayList;
+
+import java.util.Arrays;
+
+
 
 public class DBHandler extends SQLiteOpenHelper {
     private static final int DB_VERSION = 1;
@@ -39,14 +44,28 @@ public class DBHandler extends SQLiteOpenHelper {
                 formattedValues.append(checkedValue).append(", ");
             }
         }
-        return formattedValues.toString();
+        return sortIngredients(formattedValues.toString());
     }
 
-    public String getDishByIngredients(String ingredients){
+    private String sortIngredients(String ingredients) {
+        String[] ingredient = ingredients.split(", ");
+        Arrays.sort(ingredient);
+        return String.join(", ", ingredient);
+    }
+
+    public String getDishByIngredients(String ingredients) {
         SQLiteDatabase db = this.getReadableDatabase();
-        String query = "SELECT * FROM " + DB_NAME + " WHERE " + INGREDIENTS_COL + " = '" + ingredients + "'";
-        String dish = db.rawQuery(query, null).toString();
-        if(dish.isEmpty()) return "No Dish Found";
+        String dish = "No Dish Found";
+
+        String query = "SELECT " + DISH_COL + " FROM " + DB_NAME + " WHERE " + INGREDIENTS_COL + " = ?";
+        Cursor cursor = db.rawQuery(query, new String[]{ingredients});
+
+        if (cursor.moveToFirst()) {
+            dish = cursor.getString(0);
+        }
+        cursor.close();
+
+        db.close();
         return dish;
     }
 
@@ -95,7 +114,7 @@ public class DBHandler extends SQLiteOpenHelper {
 
         ContentValues tinola = new ContentValues();
         tinola.put(DISH_COL, "tinola");
-        tinola.put(INGREDIENTS_COL, "chicken, chayote, ginger, onion");
+        tinola.put(INGREDIENTS_COL, "chayote, chicken, ginger, onion");
         sqLiteDatabase.insert(DB_NAME, null, tinola);
 
     }
