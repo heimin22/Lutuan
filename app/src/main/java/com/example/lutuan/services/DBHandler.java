@@ -5,6 +5,8 @@ import android.content.Context;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 
+import java.util.ArrayList;
+
 public class DBHandler extends SQLiteOpenHelper {
     private static final int DB_VERSION = 1;
     private static final String DB_NAME = "DISH_DB";
@@ -24,11 +26,12 @@ public class DBHandler extends SQLiteOpenHelper {
         db.insert(DB_NAME, null, values);
     }
 
-    public String formatIngredients(String[] checkedValues) {
+    public String formatIngredients(ArrayList<String> arrayList) {
+        Object[] checkedValues = arrayList.toArray();
         StringBuilder formattedValues = new StringBuilder();
         int lastIndex = checkedValues.length;
         int currentIndex = 0;
-        for (String checkedValue : checkedValues) {
+        for (Object checkedValue : checkedValues) {
             currentIndex++;
             if(currentIndex == lastIndex) {
                 formattedValues.append(checkedValue);
