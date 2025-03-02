@@ -5,6 +5,7 @@ import android.view.Display;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
+import android.widget.Button;
 import android.widget.ListView;
 
 import android.widget.TextView;
@@ -23,6 +24,8 @@ import androidx.core.view.WindowInsetsCompat;
 
 
 public class MainActivity extends AppCompatActivity {
+    public ArrayList<String> selectedIngredient;
+    public Button clearButton;
 
     private List<String> selectedIngredients;
     private ListView selectedIngredientsView;
@@ -41,7 +44,7 @@ public class MainActivity extends AppCompatActivity {
         ListView ingredientsListView = findViewById(R.id.ingredients);
 
         ArrayList<String> ingredientsList = new ArrayList<>();
-
+        selectedIngredient = new ArrayList<>(5);
         // ito yung mga ingredients
         Collections.addAll(ingredientsList,
                 "Bay Leaf", "Chicken", "Garlic", "Soy Sauce", "Vinegar",
@@ -78,9 +81,24 @@ public class MainActivity extends AppCompatActivity {
 
         ingredientsListView.setOnItemClickListener((parent, view, pos, id) -> {
             String ingredient = uniqueIngredients.get(pos);
-            Toast.makeText(this, "Ingredient: " + ingredient, Toast.LENGTH_SHORT).show();
+
+
+            if (selectedIngredient.size() >= 5) {
+                Toast.makeText(this, "Puno na yung kaldero", Toast.LENGTH_SHORT).show();
+                return;
+            }
+            else {
+                for (String noDuplicateIng : selectedIngredient) {
+                    if (selectedIngredient.contains(noDuplicateIng)) {
+                        Toast.makeText(this, "Bawal umulit, tanggalin mo yan", Toast.LENGTH_SHORT).show();
+                        return;
+                    }
+                }
+                selectedIngredient.add(ingredient);
+            }
 
             selectedIngredients.add(ingredient);
+
             DisplaySelected();
         });
     }
@@ -98,6 +116,29 @@ public class MainActivity extends AppCompatActivity {
                 return view;
             }
         };
+
+
+        clearButton = findViewById(R.id.clearIngredients);
+        clearButton.setOnClickListener(v -> {
+            selectedIngredient.clear();
+            DisplaySelected();
+        });
+    }
+
+    private void DisplaySelected() {
+        ListView selectedIngredientsView = findViewById(R.id.ingSelected);
+        ArrayAdapter<String> adapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, selectedIngredient) {
+            @NonNull
+            @Override
+            public View getView(int position, View convertView, @NonNull ViewGroup parent) {
+                View view = super.getView(position, convertView, parent);
+                if (view instanceof TextView) {
+                    ((TextView) view).setTextColor(android.graphics.Color.parseColor("#121212"));
+                }
+                return view;
+            }
+        };
+
 
         selectedIngredientsView.setAdapter(adapter);
     }

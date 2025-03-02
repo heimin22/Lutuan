@@ -7,13 +7,61 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <!-- Guidelines -->
+
     <androidx.constraintlayout.widget.Guideline
         android:id="@+id/ingConstraintGuide"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintGuide_percent=".60"
-        android:orientation="vertical"
-        />
+        android:orientation="vertical" />
+
+    <!-- Ingredients selected -->
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:id="@+id/ingSelectedContainer"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:gravity="center"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:background="@drawable/ingredients_selected"
+        app:layout_constraintEnd_toEndOf="@+id/ingConstraintGuide">
+
+        <ListView
+            android:id="@+id/ingSelected"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="UselessLeaf">
+
+        </ListView>
+
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+    <!--  Clear Button  -->
+
+    <Button
+        android:layout_marginTop="20dp"
+        tools:ignore="HardcodedText"
+        android:id="@+id/clearIngredients"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:gravity="center"
+        app:layout_constraintTop_toBottomOf="@+id/ingSelectedContainer"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/ingConstraintGuide"
+        android:text="Clear"
+        android:textColor="@color/white"
+        android:backgroundTint="@color/black">
+
+    </Button>
+
+    <!-- Ingredients list -->
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/ingContainerConstraints"
@@ -35,7 +83,6 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:ignore="UselessLeaf"
             >
-
 
         </ListView>
 
