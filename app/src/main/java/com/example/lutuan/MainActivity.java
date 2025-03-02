@@ -22,10 +22,14 @@ import androidx.core.graphics.Insets;
 import androidx.core.view.ViewCompat;
 import androidx.core.view.WindowInsetsCompat;
 
+import com.example.lutuan.services.DBHandler;
 
 public class MainActivity extends AppCompatActivity {
     public ArrayList<String> selectedIngredient;
     public Button clearButton;
+    public Button submitButton;
+    public DBHandler dbHandler;
+    public String formattedIngredients;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -95,6 +99,14 @@ public class MainActivity extends AppCompatActivity {
         clearButton.setOnClickListener(v -> {
             selectedIngredient.clear();
             DisplaySelected();
+        });
+
+        submitButton = findViewById(R.id.submitIngredients);
+        submitButton.setOnClickListener(v -> {
+            dbHandler = new DBHandler(this);
+            formattedIngredients = dbHandler.formatIngredients(selectedIngredient);
+            String dish = dbHandler.getDishByIngredients(formattedIngredients.toLowerCase());
+            Toast.makeText(this, "Ang nailuto mo ay: " + dish, Toast.LENGTH_SHORT).show();
         });
     }
 
