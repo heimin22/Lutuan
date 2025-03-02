@@ -24,6 +24,21 @@ public class DBHandler extends SQLiteOpenHelper {
         db.insert(DB_NAME, null, values);
     }
 
+    public String formatCheckedValues(String[] checkedValues) {
+        StringBuilder formattedValues = new StringBuilder();
+        int lastIndex = checkedValues.length;
+        int currentIndex = 0;
+        for (String checkedValue : checkedValues) {
+            currentIndex++;
+            if(currentIndex == lastIndex) {
+                formattedValues.append(checkedValue);
+            } else {
+                formattedValues.append(checkedValue).append(", ");
+            }
+        }
+        return formattedValues.toString();
+    }
+
     @Override
     public void onCreate(SQLiteDatabase sqLiteDatabase) {
         String query = "CREATE TABLE " + DB_NAME + " ("
@@ -38,43 +53,38 @@ public class DBHandler extends SQLiteOpenHelper {
         sqLiteDatabase.insert(DB_NAME, null, adobo);
 
         ContentValues sinigang = new ContentValues();
-        adobo.put(DISH_COL, "sinigang");
-        adobo.put(INGREDIENTS_COL, "onion, pork, radish, tamarind, tomato");
+        sinigang.put(DISH_COL, "sinigang");
+        sinigang.put(INGREDIENTS_COL, "onion, pork, radish, tamarind, tomato");
         sqLiteDatabase.insert(DB_NAME, null, sinigang);
 
         ContentValues lechon_kawali = new ContentValues();
-        adobo.put(DISH_COL, "lechon kawali");
-        adobo.put(INGREDIENTS_COL, "pork belly, salt, water");
+        lechon_kawali.put(DISH_COL, "lechon kawali");
+        lechon_kawali.put(INGREDIENTS_COL, "pork belly, salt, water");
         sqLiteDatabase.insert(DB_NAME, null, lechon_kawali);
 
-        ContentValues value = new ContentValues();
-        adobo.put(DISH_COL, "value");
-        adobo.put(INGREDIENTS_COL, "value");
-        sqLiteDatabase.insert(DB_NAME, null, value);
-
         ContentValues kare_kare = new ContentValues();
-        adobo.put(DISH_COL, "kare-kare");
-        adobo.put(INGREDIENTS_COL, "eggplant, oxtail, peanut butter, string beans");
+        kare_kare.put(DISH_COL, "kare-kare");
+        kare_kare.put(INGREDIENTS_COL, "eggplant, oxtail, peanut butter, string beans");
         sqLiteDatabase.insert(DB_NAME, null, kare_kare);
 
         ContentValues bicol_express = new ContentValues();
-        adobo.put(DISH_COL, "bicol express");
-        adobo.put(INGREDIENTS_COL, "chili, coconut milk, pork, shrimp paste");
+        bicol_express.put(DISH_COL, "bicol express");
+        bicol_express.put(INGREDIENTS_COL, "chili, coconut milk, pork, shrimp paste");
         sqLiteDatabase.insert(DB_NAME, null, bicol_express);
 
         ContentValues tapsilog = new ContentValues();
-        adobo.put(DISH_COL, "tapsilog");
-        adobo.put(INGREDIENTS_COL, "beef, egg, garlic, rice");
+        tapsilog.put(DISH_COL, "tapsilog");
+        tapsilog.put(INGREDIENTS_COL, "beef, egg, garlic, rice");
         sqLiteDatabase.insert(DB_NAME, null, tapsilog);
 
         ContentValues lumpiang_shanghai = new ContentValues();
-        adobo.put(DISH_COL, "lumpiang shanghai");
-        adobo.put(INGREDIENTS_COL, "carrot, garlic, ground pork, onion, wrapper");
+        lumpiang_shanghai.put(DISH_COL, "lumpiang shanghai");
+        lumpiang_shanghai.put(INGREDIENTS_COL, "carrot, garlic, ground pork, onion, wrapper");
         sqLiteDatabase.insert(DB_NAME, null, lumpiang_shanghai);
 
         ContentValues tinola = new ContentValues();
-        adobo.put(DISH_COL, "tinola");
-        adobo.put(INGREDIENTS_COL, "chicken, chayote, ginger, onion");
+        tinola.put(DISH_COL, "tinola");
+        tinola.put(INGREDIENTS_COL, "chicken, chayote, ginger, onion");
         sqLiteDatabase.insert(DB_NAME, null, tinola);
 
     }
